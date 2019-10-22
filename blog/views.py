@@ -13,7 +13,8 @@ from .models import Post, Comment
 
 def home(request):
     context = {
-        'posts': Post.objects.all()
+        'posts': Post.objects.all(),
+#        'comments': Comment.objects.all()
     }
     return render(request, 'blog/home.html', context)
 
@@ -38,8 +39,11 @@ class UserPostListView(ListView):
 
 
 class PostDetailView(DetailView):
+
+    post = get_object_or_404(Post)
     model = Post
 
+#    comments = Comment.objects.filter(post=Post)
 
 class PostCreateView(LoginRequiredMixin, CreateView):
     model = Post
@@ -76,9 +80,21 @@ class PostDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
         return False
 
 
+class PostSortView(ListView):
+    model = Post
+    template_name = 'blog/sorted.html'  # <app>/<model>_<viewtype>.html
+    context_object_name = 'posts'
+    ordering = ['date_posted']
+    paginate_by = 5
+
 class CommentForm(CreateView):
     model = Comment
+    fields = ('content')
 
+class CommentCreateView(CreateView):
+    model = Comment
+
+    fields = ['content']
 
 def about(request):
     return render(request, 'blog/about.html', {'title': 'About'})

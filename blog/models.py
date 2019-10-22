@@ -9,6 +9,7 @@ class Post(models.Model):
     content = models.TextField()
     date_posted = models.DateTimeField(default=timezone.now)
     author = models.ForeignKey(User, on_delete=models.CASCADE)
+#    comments = models.ForeignKey(Comment, on_delete=models.CASCADE)
 
     def __str__(self):
         return self.title
@@ -21,9 +22,9 @@ class Comment(models.Model):
     date_posted = models.DateTimeField(default=timezone.now)
     author = models.ForeignKey(User, on_delete=models.CASCADE)
     post = models.ForeignKey(Post, on_delete=models.CASCADE)
-    reply = models.ForeignKey('self', null=True, on_delete=models.CASCADE, related_name='replies')
+#    reply = models.ForeignKey('self', null=True, on_delete=models.CASCADE, related_name='replies')
 
     def __str__(self):
-        return '{}-{}'.format(self.post.title, str(self.user.username))
+        return '{}-{}'.format(self.post.title, str(self.author.username))
 
 

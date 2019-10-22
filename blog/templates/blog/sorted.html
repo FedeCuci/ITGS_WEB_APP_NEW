@@ -9,16 +9,11 @@
               <small class="text-muted">{{ post.date_posted|date:"F d, Y" }}</small>
             </div>
             <h2><a class="article-title" href="{% url 'post-detail' post.id %}">{{ post.title }}</a></h2>
+
+
             <p class="article-content">{{ post.content }}</p>
-          
-    {% for comment in comments %}
 
-        <h2><a class="article-title" href="{% url 'post-detail' post.id %}">Comments</a></h2>
-        <p class="article-content">{{ comment.content }}</p>
-
-    {% endfor %}
-
-</div>
+          </div>
         </article>
     {% endfor %}
     {% if is_paginated %}
