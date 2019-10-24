@@ -17,14 +17,18 @@ class Post(models.Model):
     def get_absolute_url(self):
         return reverse('post-detail', kwargs={'pk': self.pk})
 
+    def get_top_level_comments(self):
+        return self.comment_set.filter(reply__isnull=True)
+
 class Comment(models.Model):
     content = models.TextField()
     date_posted = models.DateTimeField(default=timezone.now)
     author = models.ForeignKey(User, on_delete=models.CASCADE)
-    post = models.ForeignKey(Post, on_delete=models.CASCADE)
-#    reply = models.ForeignKey('self', null=True, on_delete=models.CASCADE, related_name='replies')
+    post = models.ForeignKey(Post, null=True, on_delete=models.CASCADE)
+    reply = models.ForeignKey('self', null=True, on_delete=models.CASCADE, blank=True, related_name='replies')
 
     def __str__(self):
         return '{}-{}'.format(self.post.title, str(self.author.username))
 
-
+#    def get_absolute_url(self):
+ #       return reverse('comment-detail', kwargs={'pk': self.pk})

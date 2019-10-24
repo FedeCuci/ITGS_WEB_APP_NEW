@@ -1,3 +1,4 @@
+
 from django.shortcuts import render, get_object_or_404
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.contrib.auth.models import User
@@ -40,7 +41,6 @@ class UserPostListView(ListView):
 
 class PostDetailView(DetailView):
 
-    post = get_object_or_404(Post)
     model = Post
 
 #    comments = Comment.objects.filter(post=Post)
@@ -87,14 +87,47 @@ class PostSortView(ListView):
     ordering = ['date_posted']
     paginate_by = 5
 
-class CommentForm(CreateView):
-    model = Comment
-    fields = ('content')
-
-class CommentCreateView(CreateView):
+class CommentCreateView(LoginRequiredMixin, UserPassesTestMixin, CreateView):
     model = Comment
 
     fields = ['content']
+
+    def form_valid(self, form):
+        form.instance.author = self.request.user
+        return super().form_valid(form)
+
+
+class CommentUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
+    model = Comment
+
+    fields = ['content']
+
+    def form_valid(self, form):
+        form.instance.author = self.request.user
+        return super().form_valid(form)
+
+    def test_func(self):
+        comment = self.get_object()
+        if self.request.user == comment.author:
+            return True
+        return False
+
+
+class CommentDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
+    models = Comment
+    success_url = '/'
+
+    def test_func(self):
+        comment = self.get_object()
+        if self.request.user == comment.author:
+            return True
+        return False
+
+class CommentDetailView(DetailView):
+    model = Comment
+
+    fields = ['content']
+
 
 def about(request):
     return render(request, 'blog/about.html', {'title': 'About'})
