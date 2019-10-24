@@ -20,7 +20,18 @@
       <a class="nav-item nav-link" href="{% url 'comment-create' object.id %}">Reply</a>
       <br />
       <br />
+
+      
+
+	{% with comments=object.get_top_level_comments %}
+       
+	<ul>
+	     {% include "blog/tree.html" %}
+	</ul>
       <h6> Comments: </h6>
+
+        {% endwith %} 
+
 
       {% for comment in object.get_top_level_comments %}
 
