@@ -32,43 +32,6 @@
 
         {% endwith %} 
 
-
-      {% for comment in object.get_top_level_comments %}
-
-         <div class="col-md-6">
-
-          <a href="{% url 'user-posts' object.author.username %}"> {{ comment.author|capfirst }} </a>
-          <small class="text-muted">{{ comment.date_posted|date:"F d, Y" }}</small>
-
-         {% if comment.author == user %}
-
-          <small class="font-weight-light"><a href="#"> edit </a></small>
-
-          {% endif %}
-          
-         <div class="col-md-8">
-
-          <p class="font-weight-light">{{ comment.content|capfirst }}</p>
-
-         <div class="col-md-10">
-          <small class="text-muted"><a href="#">Reply</a></small>
-
-         </div>
-         </div>
-         </div>         
-
-        <hr></hr>
-
-          {% for reply in comment.replies.all %}
-
-          <p class="font-weight-lighter">{{ reply.content  }}</p>
-
-          {% endfor %}
-	
-        <br />
-
-      {% endfor %}
-
  </div>
  </article>
 {% endblock content %}

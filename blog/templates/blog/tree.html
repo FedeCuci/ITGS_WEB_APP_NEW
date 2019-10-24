@@ -1,7 +1,20 @@
 {% for comment in comments %}
   <li>
+
+
+      <a href="{% url 'user-posts' object.author.username %}"> {{ comment.author|capfirst }} </a>
+      <small class="text-muted">{{ comment.date_posted|date:"F d, Y" }}</small>
+
+      {% if comment.author == user %}
+
+      <small class="font-weight-light"><a href="#"> edit </a></small>
+
+      {% endif %}
+
       {{ comment.content }}
       {% if comment.replies.all %}
+
+
         <ul>
           {% include "blog/tree.html" with comments=comment.replies.all %}
         </ul>
