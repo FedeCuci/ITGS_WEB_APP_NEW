@@ -1,0 +1,10 @@
+{% for comment in comments %}
+  <li>
+      {{ comment.content }}
+      {% if comment.replies.all %}
+        <ul>
+          {% include "blog/tree.html" with comments=comment.replies.all %}
+        </ul>
+      {% endif %}
+  </li>
+{% endfor %}
