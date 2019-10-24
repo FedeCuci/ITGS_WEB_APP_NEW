@@ -13,48 +13,33 @@
           </div>
         {% endif %}
       </div>
-
       <h2 class="article-title">{{ object.title }}</h2>
-      <p class="col-md-4">{{ object.content }}</p>
+      <p class="article-content">{{ object.content }}</p>
 
       <a class="nav-item nav-link" href="{% url 'comment-create' object.id %}">Reply</a>
       <br />
       <br />
-      <h6> Comments: </h6>
 
       {% for comment in object.get_top_level_comments %}
 
-         <div class="col-md-6">
+          {% if comment.author == user %}
 
-          <a href="{% url 'user-posts' object.author.username %}"> {{ comment.author|capfirst }} </a>
-          <small class="text-muted">{{ comment.date_posted|date:"F d, Y" }}</small>
-
-         {% if comment.author == user %}
-
-          <small class="font-weight-light"><a href="#"> edit </a></small>
+          <a class="btn btn-secondary btn-sm mt-1 mb-1" href="{% url 'comment-update' commend.id %}">Update</a>
+          <a class="btn btn-danger btn-sm mt-1 mb-1" href="{% url 'comment-delete' comment.id %}">Delete</a>
 
           {% endif %}
+
+          <p class="article-content">{{ comment.content }}</p>
+          <small class="text-muted">by {{ comment.author|capfirst }} </small>
           
-         <div class="col-md-8">
-
-          <p class="font-weight-light">{{ comment.content|capfirst }}</p>
-
-         <div class="col-md-10">
-          <small class="text-muted"><a href="#">Reply</a></small>
-
-         </div>
-         </div>
-         </div>         
-
-        <hr></hr>
-
           {% for reply in comment.replies.all %}
 
-          <p class="font-weight-lighter">{{ reply.content  }}</p>
+          <p class="article-content">{{ reply.content  }}</p>
 
           {% endfor %}
 	
-        <br />
+
+        <a class="nav-item nav-link" href="#">Reply</a>
 
       {% endfor %}
 
