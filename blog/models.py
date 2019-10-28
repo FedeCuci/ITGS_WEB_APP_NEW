@@ -31,4 +31,4 @@ class Comment(models.Model):
         return '{}-{}'.format(self.post.title, str(self.author.username))
 
 #    def get_absolute_url(self):
- #       return reverse('comment-detail', kwargs={'pk': self.pk})
+ #       return reverse('post-detail', kwargs={'pk': self.post.pk})
