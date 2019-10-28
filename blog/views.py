@@ -1,4 +1,4 @@
-
+from django.urls import reverse
 from django.shortcuts import render, get_object_or_404
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.contrib.auth.models import User
@@ -87,7 +87,7 @@ class PostSortView(ListView):
     ordering = ['date_posted']
     paginate_by = 5
 
-class CommentCreateView(LoginRequiredMixin, UserPassesTestMixin, CreateView):
+class CommentCreateView(LoginRequiredMixin, CreateView):
     model = Comment
 
     fields = ['content']
@@ -95,6 +95,9 @@ class CommentCreateView(LoginRequiredMixin, UserPassesTestMixin, CreateView):
     def form_valid(self, form):
         form.instance.author = self.request.user
         return super().form_valid(form)
+
+    def get_success_url(self):
+        return reverse('post-detail', kwargs={'pk': self.post.pk})
 
 
 class CommentUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):

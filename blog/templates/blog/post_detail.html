@@ -21,16 +21,16 @@
       <br />
       <br />
 
-      
+      <h6> Comments: </h6>      
 
 	{% with comments=object.get_top_level_comments %}
        
 	<ul>
 	     {% include "blog/tree.html" %}
 	</ul>
-      <h6> Comments: </h6>
 
         {% endwith %} 
+
 
  </div>
  </article>
