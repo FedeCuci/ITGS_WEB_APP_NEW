@@ -7,7 +7,7 @@
 
       {% if comment.author == user %}
 
-      <small class="font-weight-light"><a href="#"> edit </a></small>
+      <small class="font-weight-light"><a href="{% url 'comment-update' comment.id %}"> edit </a></small>
 
       {% endif %}
 
@@ -16,6 +16,9 @@
       {{ comment.content }}
       
       <br />
+
+      <small class="font-weight-light"><a href="{% url 'comment-reply-create' comment.id %}"> reply </a></small>
+
 
       {% if comment.replies.all %}
 

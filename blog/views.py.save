@@ -93,15 +93,15 @@ class CommentCreateView(LoginRequiredMixin, CreateView):
     fields = ['content']
 
     def form_valid(self, form):
-        post = get_object_or_404(Post, pk=self.kwargs.get('pk'))
-        form.instance.post = post
-
         form.instance.author = self.request.user
         return super().form_valid(form)
-        
+
+    def post(self, request, *args, **kwargs):
+        form = 
+
 
     def get_success_url(self):
-        return reverse('post-detail', kwargs={'pk': self.object.post.pk})
+        return reverse('post-detail', kwargs={'pk': self.post.pk})
 
 
 class CommentUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
@@ -109,14 +109,15 @@ class CommentUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
 
     fields = ['content']
 
+    def form_valid(self, form):
+        form.instance.author = self.request.user
+        return super().form_valid(form)
+
     def test_func(self):
         comment = self.get_object()
         if self.request.user == comment.author:
             return True
         return False
-
-    def get_success_url(self):
-        return reverse('post-detail', kwargs={'pk': self.object.post.pk})
 
 
 class CommentDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
@@ -134,20 +135,6 @@ class CommentDetailView(DetailView):
 
     fields = ['content']
 
-class CommentReplyCreate(LoginRequiredMixin, CreateView):
-    model = Comment
-
-    fields = ['content']
-
-    def form_valid(self, form):
-        comment = get_object_or_404(Comment, pk=self.kwargs.get('pk'))
-        form.instance.author = self.request.user
-        form.instance.post = comment.post
-        form.instance.reply = comment
-        return super().form_valid(form)
-
-    def get_success_url(self):
-        return reverse('post-detail', kwargs={'pk': self.object.post.pk})
 
 def about(request):
     return render(request, 'blog/about.html', {'title': 'About'})
